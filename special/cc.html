@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞翔小鸟</title>
+    <style>
+         body {
+            background-image: url('011.jpg'); /* 设置背景图片 */
+            background-repeat: no-repeat; /* 不重复图片 */
+            background-attachment: fixed; /* 固定背景图片 */
+            background-size: cover; /* 覆盖整个屏幕 */
+        }
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            width: 100vw;
+            height: 100vh;
+            display: block; /* 防止出现滚动条 */
+        }
+
+        #gameOverScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding-top: 20%;
+        }
+
+        #gameOverScreen button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #winScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding-top: 20%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverScreen">
+        <h1>游戏结束</h1>
+        <p>得分: <span id="finalScore"></span></p>
+        <button id="restartButton">重新开始</button>
+        <button id="exitButton">退出</button>
+    </div>
+    <div id="winScreen">
+        <h1>恭喜通关！！！</h1>
+        <p>flag{w3lc0m3_t0_Czxh}</p>
+        <button id="restartWinButton">重新开始</button>
+        <button id="exitWinButton">退出</button>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 设置 canvas 的实际像素大小
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const gravity = 0.2;
+        const jumpForce = -3;
+        let bird = {
+            x: canvas.width / 4, // 小鸟的初始位置调整到屏幕左四分之一处
+            y: canvas.height / 2,
+            v: 0
+        };
+        let pipes = [];
+        let score = 0;
+        let gameOver = false;
+        let isJumping = false; // 用于判断是否按住鼠标左键
+
+        function drawBird() {
+            ctx.fillStyle = 'blue'; // 小鸟颜色改为蓝色
+            ctx.beginPath();
+            ctx.arc(bird.x, bird.y, 10, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function drawPipes() {
+            pipes.forEach(p => {
+                ctx.fillStyle = 'green';
+                ctx.fillRect(p.x, 0, 50, p.topHeight); // 增加障碍物的宽度
+                ctx.fillRect(p.x, p.bottomY, 50, canvas.height - p.bottomY); // 增加障碍物的宽度
+            });
+        }
+
+        function drawScore() {
+            ctx.font = '25px Arial'; // 增大得分的字体大小
+            ctx.fillStyle = 'black';
+            ctx.fillText(`得分: ${score}`, 5, 20);
+        }
+
+        function updateBird() {
+            if (isJumping) {
+                bird.v = jumpForce;
+            } else {
+                bird.v += gravity;
+            }
+            bird.y += bird.v;
+
+            if (bird.y <= 0 || bird.y >= canvas.height) {
+                gameOver = true;
+            }
+        }
+
+        function createPipe() {
+            const pipeHeight = 120;
+            const minSpace = 200; // 增加障碍物之间的距离
+            const topHeight = Math.floor(Math.random() * (canvas.height - minSpace - 100)) + 40;
+            const bottomY = topHeight + pipeHeight;
+            const newPipe = {
+                x: canvas.width - 50, // 减少初始障碍物距离
+                topHeight: topHeight,
+                bottomY: bottomY,
+                passed: false
+            };
+            pipes.push(newPipe);
+        }
+
+        function updatePipes() {
+            pipes.forEach((p, index) => {
+                p.x -= 2;
+                if (p.x + 50 < 0) { // 更新障碍物的宽度
+                    pipes.splice(index, 1);
+                }
+
+                if (bird.x >= p.x && bird.x <= p.x + 50) { // 更新障碍物的宽度
+                    if (bird.y <= p.topHeight || bird.y >= p.bottomY) {
+                        gameOver = true;
+                    }
+                }
+
+                if (bird.x > p.x && bird.x < p.x + 50 && !p.passed) { // 更新障碍物的宽度
+                    score++;
+                    p.passed = true;
+                }
+            });
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 500) { // 增加障碍物生成的间隔
+                createPipe();
+            }
+        }
+
+        document.addEventListener('mousedown', function () {
+            isJumping = true;
+        });
+
+        document.addEventListener('mouseup', function () {
+            isJumping = false;
+        });
+
+        function gameLoop() {
+            if (gameOver) {
+                document.getElementById('finalScore').textContent = score;
+                document.getElementById('gameOverScreen').style.display = 'block';
+                return;
+            }
+
+            if (score >= 20000) {
+                document.getElementById('winScreen').style.display = 'block';
+                gameOver = true;
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBird();
+            drawPipes();
+            drawScore();
+            updateBird();
+            updatePipes();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.getElementById('restartButton').addEventListener('click', function () {
+            location.reload();
+        });
+
+        document.getElementById('exitButton').addEventListener('click', function () {
+            window.close(); // 尝试关闭窗口，如果不行则跳转到空白页
+            if (window.self !== window.top) {
+                window.top.close();
+            } else {
+                window.location.href = 'about:blank';
+            }
+        });
+
+        document.getElementById('restartWinButton').addEventListener('click', function () {
+            location.reload();
+        });
+
+        document.getElementById('exitWinButton').addEventListener('click', function () {
+            window.close(); // 尝试关闭窗口，如果不行则跳转到空白页
+            if (window.self !== window.top) {
+                window.top.close();
+            } else {
+                window.location.href = 'about:blank';
+            }
+        });
+
+        createPipe();
+        gameLoop();
+    </script>
+</body>
+
+</html>
