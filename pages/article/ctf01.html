@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>[SWPUCTF 2021 新生赛]easyrce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        article {
+            margin-bottom: 20px;
+        }
+
+        .article-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>[SWPUCTF 2021 新生赛]easyrce 做题笔记</h1>
+            <p>创作时间：2025年01月01日  来源：NSSCTF</p>
+        </header>
+
+        <article>
+            <p1>题解：</p1>
+            <p>首先打开题目靶场：</p>
+            <img src="./pict/t01.png"  class="article-image">
+            <p>进入后看到一串php代码</p>
+            <img src="./pict/t01.png"  class="article-image">
+            <p>可以看到使用了 eval() 函数</p>
+            <p>因此我们可以通过构造 URL 参数来执行任意的 PHP 代码</p>
+            <p>rce 题目，常用的几个系统命令执行函数：
+                system()
+                passthru()
+                exec()
+                shell_exec()
+                popen()
+                proc_open()
+                pcntl_exec()</p>
+            <p>这里我们先ls一下，构造“？url=system("ls /")”</p>
+            <img src="./pict/t03.png"  class="article-image">
+            <p>发现了flag,接下来cat即可。</p>
+            <img src="./pict/t04.png"  class="article-image">
+            <p>成功拿到flag,   NSSCTF{3eb9cbd2-b52e-4c74-a597-78bcd598eec2} </p>
+        </article>
+
+        <footer>
+            <p>作者：M.Y</p>
+        </footer>
+    </div>
+</body>
+</html>
