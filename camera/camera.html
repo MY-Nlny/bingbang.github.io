@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>时光相册</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-image: url('./other/背景.png'); /* 假设你有一个纹理背景图片 */
+    background-size: cover;
+  }
+  .相册 {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* 毛玻璃效果 */
+    backdrop-filter: blur(10px); /* 毛玻璃效果 */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px; /* 圆角边框 */
+    overflow: hidden; /* 确保子元素不会超出边界 */
+  }
+  .相册-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  .相册-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px; /* 增加图片之间的间距 */
+  }
+  .相册-item {
+    position: relative;
+    width: 150px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 8px; /* 圆角边框 */
+    transition: transform 0.3s ease; /* 平滑过渡效果 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+  }
+  .相册-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px; /* 圆角边框 */
+    transition: transform 0.3s ease; /* 平滑过渡效果 */
+  }
+  .相册-item:hover img {
+    transform: scale(1.05); /* 鼠标悬停时放大 */
+  }
+  .modal {
+    display: none; /* 默认不显示 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* 背景颜色 */
+    background-color: rgba(0,0,0,0.9); /* 黑色背景，不透明度 */
+  }
+  .modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+  }
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="相册">
+  <h1 class="相册-title">时光相册-记录美好生活</h1>
+  <div class="相册-row">
+    <div class="相册-item" onclick="openModal('./pic/img001.jpg')">
+      <img src="./pic/img001.jpg" alt="图片1">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img002.jpg')">
+      <img src="./pic/img002.jpg" alt="图片2">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img003.jpg')">
+      <img src="./pic/img003.jpg" alt="图片3">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img004.jpg')">
+      <img src="./pic/img004.jpg" alt="图片4">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img005.jpg')">
+      <img src="./pic/img005.jpg" alt="图片5">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img006.jpg')">
+      <img src="./pic/img006.jpg" alt="图片6">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img007.jpg')">
+      <img src="./pic/img007.jpg" alt="图片7">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img008.jpg')">
+      <img src="./pic/img008.jpg" alt="图片8">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img009.jpg')">
+      <img src="./pic/img009.jpg" alt="图片9">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0010.jpg')">
+      <img src="./pic/img0010.jpg" alt="图片10">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0011.jpg')">
+      <img src="./pic/img0011.jpg" alt="图片11">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0012.jpg')">
+      <img src="./pic/img0012.jpg" alt="图片12">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0013.jpg')">
+      <img src="./pic/img0013.jpg" alt="图片13">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0014.jpg')">
+      <img src="./pic/img0014.jpg" alt="图片14">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0015.jpg')">
+      <img src="./pic/img0015.jpg" alt="图片15">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0016.jpg')">
+      <img src="./pic/img0016.jpg" alt="图片16">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0017.jpg')">
+      <img src="./pic/img0017.jpg" alt="图片17">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0018.jpg')">
+      <img src="./pic/img0018.jpg" alt="图片18">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0019.jpg')">
+      <img src="./pic/img0019.jpg" alt="图片19">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0020.jpg')">
+      <img src="./pic/img0020.jpg" alt="图片20">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0021.jpg')">
+      <img src="./pic/img0021.jpg" alt="图片21">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0022.jpg')">
+      <img src="./pic/img0022.jpg" alt="图片22">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0023.jpg')">
+      <img src="./pic/img0023.jpg" alt="图片23">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0024.jpg')">
+      <img src="./pic/img0024.jpg" alt="图片24">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0025.jpg')">
+      <img src="./pic/img0025.jpg" alt="图片25">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0026.jpg')">
+      <img src="./pic/img0026.jpg" alt="图片26">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0027.jpg')">
+      <img src="./pic/img0027.jpg" alt="图片27">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0028.jpg')">
+      <img src="./pic/img0028.jpg" alt="图片28">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0029.jpg')">
+      <img src="./pic/img0029.jpg" alt="图片29">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0030.jpg')">
+      <img src="./pic/img0030.jpg" alt="图片30">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0031.jpg')">
+      <img src="./pic/img0031.jpg" alt="图片31">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0032.jpg')">
+      <img src="./pic/img0032.jpg" alt="图片32">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0033.jpg')">
+      <img src="./pic/img0033.jpg" alt="图片33">
+    </div>
+    <div class="相册-item" onclick="openModal('./pic/img0034.jpg')">
+      <img src="./pic/img0034.jpg" alt="图片34">
+    </div>
+    
+    
+    <!-- 更多图片 -->
+  </div>
+</div>
+
+<div id="myModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
+
+<script>
+// 获取模态框元素
+var modal = document.getElementById("myModal");
+
+// 获取图像元素并存储在数组中
+var imgs = document.getElementsByClassName("相册-item");
+var modalImg = document.getElementById("modalImg");
+
+// 点击图片打开模态框
+function openModal(imgName) {
+  modal.style.display = "block";
+  modalImg.src = imgName;
+}
+
+// 点击 <span> (x) 关闭模态框
+function closeModal() {
+  modal.style.display = "none";
+}
+</script>
+
+</body>
+</html>
